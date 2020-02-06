@@ -38,9 +38,11 @@ class Blockchain {
             const previousBlock = this.chain[i - 1];
 
             if(currentBlock.hash !== currentBlock.calculateHash()){
+                console.log("cracked chain node _> ", currentBlock.index);
                 return false;
             }
             if(currentBlock.previousHash !== previousBlock.hash) {
+                console.log("cracked chain node _> ", currentBlock.index);
                 return false;
             }
         }
@@ -55,4 +57,14 @@ blockchainSimple.addBlock(new Block(2, "07/02/2020", { amount: 10}));
 
 console.log(JSON.stringify(blockchainSimple, null, 4));
 
+// test blockchain broked & add data
+blockchainSimple.chain[1].data = { amount: 100 };
+
+// test blockchaing new calculateHash
+blockchainSimple.chain[1].hash = blockchainSimple.chain[1].calculateHash();
+
+
+
 console.log('\nIs blockchain valid? _> ' + blockchainSimple.isChainValid());
+
+console.log(JSON.stringify(blockchainSimple, null, 4)); 
