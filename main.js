@@ -6,7 +6,7 @@ class Block {
         this.timestamp = timestamp;
         this.data = data;
         this.previousHash = previousHash;
-        this.hash = '';
+        this.hash = this.calculateHash();
     }
     calculateHash() {
         return SHA256(this.index + this.previousHash + this.timestamp + JSON.stringify(this.data)).toString();   
@@ -34,6 +34,6 @@ class Blockchain {
 
 let blockchainSimple = new Blockchain();
 blockchainSimple.addBlock(new Block(1, "06/02/2020", { amount: 4}));
-blockchainSimple.addBlock(new Block(1, "07/02/2020", { amount: 10}));
+blockchainSimple.addBlock(new Block(2, "07/02/2020", { amount: 10}));
 
 console.log(JSON.stringify(blockchainSimple, null, 4));
