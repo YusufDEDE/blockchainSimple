@@ -5,7 +5,7 @@
 $ npm install
 $ npm start
 ```
-## Result
+## Result simple
 
 ```json
 Mining block 1.....
@@ -83,3 +83,18 @@ Is blockchain valid? _> false
 }
 
 ```
+
+## Transaction Simple
+
+```json
+
+Starting the miner...
+Block mined: 0055ac90c7ff01293473b0d93b2b1d5397fa7dd393bdaf874decf1476984851c
+Block successfully mined!
+
+Balance of yusuf is 90
+Is chain valid? true
+
+```
+
+## Cheers!
