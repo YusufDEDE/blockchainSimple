@@ -1,19 +1,38 @@
-const {Blockchain, Transaction} = require('./blockchain');
+const { Blockchain, Transaction } = require('./blockchain');
 const EC = require('elliptic').ec;
 const ec = new EC('secp256k1');
 
-const myKey = ec.keyFromPrivate('9e16f1cb1fbd2aa5ca7a2b331efc8336aac73e9f0ac4e25bcbf2bb63a46c43ff');
+// Your private key goes here
+const myKey = ec.keyFromPrivate('7c4c45907dec40c91bab3480c39032e90049f1a44f3e18c3e07c23e3273995cf');
+
+// From that we can calculate your public key (which doubles as your wallet address)
 const myWalletAddress = myKey.getPublic('hex');
 
-let dedeCoin = new Blockchain();
+// Create new instance of Blockchain class
+const dedeCoin = new Blockchain();
 
-const tx1 = new Transaction(myWalletAddress, 'public key goes here', 10);
+// Create a transaction & sign it with your key
+const tx1 = new Transaction(myWalletAddress, 'address2', 100);
 tx1.signTransaction(myKey);
 dedeCoin.addTransaction(tx1);
 
-console.log("\nStarting the miner...")
+// Mine block
 dedeCoin.minePendingTransactions(myWalletAddress);
 
-console.log("\nBalance of yusuf is", dedeCoin.getBalanceOfAdress(myWalletAddress));
+// Create second transaction
+const tx2 = new Transaction(myWalletAddress, 'address1', 50);
+tx2.signTransaction(myKey);
+dedeCoin.addTransaction(tx2);
 
-console.log('Is chain valid?', dedeCoin.isChainValid());
+// Mine block
+dedeCoin.minePendingTransactions(myWalletAddress);
+
+console.log();
+console.log(`Balance of yusuf is ${dedeCoin.getBalanceOfAddress(myWalletAddress)}`);
+
+// Uncomment this line if you want to test tampering with the chain
+// savjeeCoin.chain[1].transactions[0].amount = 10;
+
+// Check if the chain is valid
+console.log();
+console.log('Blockchain valid?', dedeCoin.isChainValid() ? 'Yes' : 'No');
