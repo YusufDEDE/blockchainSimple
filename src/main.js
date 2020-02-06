@@ -1,30 +1,19 @@
 const {Blockchain, Transaction} = require('./blockchain');
+const EC = require('elliptic').ec;
+const ec = new EC('secp256k1');
 
-let blockchainSimple = new Blockchain();
+const myKey = ec.keyFromPrivate('9e16f1cb1fbd2aa5ca7a2b331efc8336aac73e9f0ac4e25bcbf2bb63a46c43ff');
+const myWalletAddress = myKey.getPublic('hex');
 
+let dedeCoin = new Blockchain();
 
-/*
-console.log("Mining block 1.....");
-blockchainSimple.addBlock(new Block(1, "06/02/2020", { amount: 4}));
-console.log("Mining block 2 .....");
-blockchainSimple.addBlock(new Block(2, "07/02/2020", { amount: 10}));
-console.log(JSON.stringify(blockchainSimple, null, 4));
-// test blockchain broked & add data
-blockchainSimple.chain[1].data = { amount: 100 };
-// test blockchaing new calculateHash
-blockchainSimple.chain[1].hash = blockchainSimple.chain[1].calculateHash();
-console.log('\nIs blockchain valid? _> ' + blockchainSimple.isChainValid());
-console.log(JSON.stringify(blockchainSimple, null, 4));  */
+const tx1 = new Transaction(myWalletAddress, 'public key goes here', 10);
+tx1.signTransaction(myKey);
+dedeCoin.addTransaction(tx1);
 
-blockchainSimple.createTransaction(new Transaction('address1', 'address2', 100));
-blockchainSimple.createTransaction(new Transaction('address2', 'address1', 50));
+console.log("\nStarting the miner...")
+dedeCoin.minePendingTransactions(myWalletAddress);
 
-console.log("\nStarting the mine...");
-blockchainSimple.minePendingTransactions('yusuf-address');
+console.log("\nBalance of yusuf is", dedeCoin.getBalanceOfAdress(myWalletAddress));
 
-console.log("\nBalance of yusuf is", blockchainSimple.getBalanceOfAdress('yusuf-address'));
-
-console.log("\nStarting the miner again..")
-blockchainSimple.minePendingTransactions('yusuf-address');
-
-console.log("\nBalance of yusuf is", blockchainSimple.getBalanceOfAdress('yusuf-address'));
+console.log('Is chain valid?', dedeCoin.isChainValid());
