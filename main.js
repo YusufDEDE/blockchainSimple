@@ -25,11 +25,28 @@ class Blockchain {
     getLatestBlock() {
         return this.chain[this.chain.length -1];
     }
+
     addBlock(newBlock) {
         newBlock.previousHash = this.getLatestBlock().hash;
         newBlock.hash = newBlock.calculateHash();
         this.chain.push(newBlock);
     }
+
+    isChainValid() {
+        for(let i=1; i<this.chain.length; i++){
+            const currentBlock = this.chain[i];
+            const previousBlock = this.chain[i - 1];
+
+            if(currentBlock.hash !== currentBlock.calculateHash()){
+                return false;
+            }
+            if(currentBlock.previousHash !== previousBlock.hash) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
 
 let blockchainSimple = new Blockchain();
@@ -37,3 +54,5 @@ blockchainSimple.addBlock(new Block(1, "06/02/2020", { amount: 4}));
 blockchainSimple.addBlock(new Block(2, "07/02/2020", { amount: 10}));
 
 console.log(JSON.stringify(blockchainSimple, null, 4));
+
+console.log('\nIs blockchain valid? _> ' + blockchainSimple.isChainValid());
